@@ -1,0 +1,146 @@
+{
+    "resourceType": "ValueSet",
+    "id": "2.16.840.1.113883.3.88.12.80.62",
+    "meta": {
+        "versionId": "44",
+        "lastUpdated": "2025-08-19T19:40:29.000-04:00",
+        "profile": [
+            "http://hl7.org/fhir/StructureDefinition/shareablevalueset",
+            "http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-valueset-cqfm",
+            "http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-valueset-cqfm"
+        ]
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/valueset-author",
+            "valueContactDetail": {
+                "name": "HL7 US Realm Program Management Author"
+            }
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/resource-lastReviewDate",
+            "valueDate": "2024-06-05"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/valueset-effectiveDate",
+            "valueDate": "2024-03-22"
+        }
+    ],
+    "url": "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.88.12.80.62",
+    "identifier": [
+        {
+            "system": "urn:ietf:rfc:3986",
+            "value": "urn:oid:2.16.840.1.113883.3.88.12.80.62"
+        }
+    ],
+    "version": "20240322",
+    "name": "VitalSignResultType",
+    "title": "Vital Sign Result Type",
+    "status": "active",
+    "date": "2024-03-22T01:10:41-04:00",
+    "publisher": "HL7 US Realm Program Management Steward",
+    "jurisdiction": [
+        {
+            "extension": [
+                {
+                    "url": "http://hl7.org/fhir/StructureDefinition/data-absent-reason",
+                    "valueCode": "unknown"
+                }
+            ]
+        }
+    ],
+    "purpose": "(Clinical Focus: This set of values represent clinical observations classified as vital signs. Some terms include a method. Basic oxygen rate and flow terms are also included.),(Data Element Scope: LOINC Concepts considered to be common vital signs),(Inclusion Criteria: Specific set of concepts selected),(Exclusion Criteria: NA)",
+    "compose": {
+        "include": [
+            {
+                "system": "http://loinc.org",
+                "concept": [
+                    {
+                        "code": "2708-6",
+                        "display": "Oxygen saturation in Arterial blood"
+                    },
+                    {
+                        "code": "29463-7",
+                        "display": "Body weight"
+                    },
+                    {
+                        "code": "3140-1",
+                        "display": "Body surface area Derived from formula"
+                    },
+                    {
+                        "code": "3150-0",
+                        "display": "Inhaled oxygen concentration"
+                    },
+                    {
+                        "code": "3151-8",
+                        "display": "Inhaled oxygen flow rate"
+                    },
+                    {
+                        "code": "39156-5",
+                        "display": "Body mass index (BMI) [Ratio]"
+                    },
+                    {
+                        "code": "59408-5",
+                        "display": "Oxygen saturation in Arterial blood by Pulse oximetry"
+                    },
+                    {
+                        "code": "59575-1",
+                        "display": "Body mass index (BMI) [Percentile] Per age"
+                    },
+                    {
+                        "code": "59576-9",
+                        "display": "Body mass index (BMI) [Percentile] Per age and sex"
+                    },
+                    {
+                        "code": "77606-2",
+                        "display": "Weight-for-length Per age and sex"
+                    },
+                    {
+                        "code": "8287-5",
+                        "display": "Head Occipital-frontal circumference by Tape measure"
+                    },
+                    {
+                        "code": "8289-1",
+                        "display": "Head Occipital-frontal circumference Percentile"
+                    },
+                    {
+                        "code": "8302-2",
+                        "display": "Body height"
+                    },
+                    {
+                        "code": "8306-3",
+                        "display": "Body height --lying"
+                    },
+                    {
+                        "code": "8310-5",
+                        "display": "Body temperature"
+                    },
+                    {
+                        "code": "8462-4",
+                        "display": "Diastolic blood pressure"
+                    },
+                    {
+                        "code": "8478-0",
+                        "display": "Mean blood pressure"
+                    },
+                    {
+                        "code": "8480-6",
+                        "display": "Systolic blood pressure"
+                    },
+                    {
+                        "code": "8867-4",
+                        "display": "Heart rate"
+                    },
+                    {
+                        "code": "9279-1",
+                        "display": "Respiratory rate"
+                    },
+                    {
+                        "code": "9843-4",
+                        "display": "Head Occipital-frontal circumference"
+                    }
+                ]
+            }
+        ]
+    }
+}

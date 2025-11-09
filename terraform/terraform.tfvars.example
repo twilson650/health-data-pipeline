@@ -1,0 +1,31 @@
+# Copy this file to terraform.tfvars and fill in your values
+# DO NOT commit terraform.tfvars to version control
+
+# AWS Configuration
+aws_region = "us-west-2"
+environment = "dev"
+
+# Database Configuration
+db_password = "your-secure-password-here"
+db_instance_class = "db.t3.micro"
+
+# Networking
+vpc_cidr = "10.0.0.0/16"
+availability_zones = ["us-west-2a", "us-west-2b"]
+
+# ECS Configuration
+ecs_cpu = 256
+ecs_memory = 512
+
+# Monitoring
+enable_cloudwatch_logs = true
+log_retention_days = 30
+
+# Security
+allowed_cidr_blocks = ["0.0.0.0/0"]
+
+# Additional tags
+additional_tags = {
+  Owner = "your-name"
+  CostCenter = "engineering"
+}
