@@ -56,7 +56,9 @@ poetry.lock  # Uncomment if you want to ignore lock files (not recommended for l
 *.tfstate
 *.tfstate.*
 *.tfvars
+*.tfplan
 !terraform.tfvars.example
+backend.tf
 .terraform.lock.hcl
 crash.log
 crash.*.log

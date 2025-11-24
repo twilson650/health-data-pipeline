@@ -2,7 +2,7 @@
 variable "aws_region" {
   description = "AWS region for resources"
   type        = string
-  default     = "us-west-2"
+  default     = "us-east-1"
 }
 
 variable "environment" {
@@ -23,10 +23,17 @@ variable "project_name" {
 }
 
 # Database variables
+variable "db_password_secret_name" {
+  description = "Name of the AWS Secrets Manager secret containing the RDS database password"
+  type        = string
+  default     = ""  # Will default to "${project_name}-${environment}-db-password" if empty
+}
+
 variable "db_password" {
-  description = "Password for the RDS database"
+  description = "Password for the RDS database (deprecated: use db_password_secret_name instead)"
   type        = string
   sensitive   = true
+  default     = null
 }
 
 variable "db_instance_class" {

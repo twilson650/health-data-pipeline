@@ -26,7 +26,7 @@ terraform {
   backend "s3" {
     bucket         = "your-terraform-state-bucket"
     key            = "fhir-ml-pipeline/terraform.tfstate"
-    region         = "us-west-2"
+    region         = "us-east-1"
     encrypt        = true
     dynamodb_table = "terraform-state-lock"
   }
@@ -44,7 +44,7 @@ cp terraform/terraform.tfvars.example terraform/terraform.tfvars
 Edit `terraform/terraform.tfvars` with your values:
 
 ```hcl
-aws_region = "us-west-2"
+aws_region = "us-east-1"
 environment = "dev"
 db_password = "your-secure-password-here"
 ```
@@ -95,7 +95,7 @@ Add these secrets to your GitHub repository:
 
 - `AWS_ACCESS_KEY_ID` - AWS access key
 - `AWS_SECRET_ACCESS_KEY` - AWS secret key
-- `AWS_REGION` - AWS region (default: us-west-2)
+- `AWS_REGION` - AWS region (default: us-east-1)
 - `DB_PASSWORD` - Database password
 
 ### Workflows

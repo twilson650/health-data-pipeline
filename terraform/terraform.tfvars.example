@@ -2,7 +2,7 @@
 # DO NOT commit terraform.tfvars to version control
 
 # AWS Configuration
-aws_region = "us-west-2"
+aws_region = "us-east-1"
 environment = "dev"
 
 # Database Configuration
@@ -11,7 +11,7 @@ db_instance_class = "db.t3.micro"
 
 # Networking
 vpc_cidr = "10.0.0.0/16"
-availability_zones = ["us-west-2a", "us-west-2b"]
+availability_zones = ["us-east-1a", "us-east-1b"]
 
 # ECS Configuration
 ecs_cpu = 256

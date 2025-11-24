@@ -8,7 +8,7 @@ This document outlines the secrets that need to be configured in your GitHub rep
 
 - **`AWS_ACCESS_KEY_ID`** - AWS access key ID
 - **`AWS_SECRET_ACCESS_KEY`** - AWS secret access key  
-- **`AWS_REGION`** - AWS region (default: us-west-2)
+- **`AWS_REGION`** - AWS region (default: us-east-1)
 
 ### Optional AWS secrets
 

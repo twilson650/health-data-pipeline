@@ -1,20 +1,13 @@
 # Configure the AWS Provider
 terraform {
-  required_version = ">= 1.0"
+  required_version = ">= 1.2"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "~> 5.92"
     }
   }
   
-  # Configure remote state storage
-  backend "s3" {
-    # This will be configured via backend config file or environment variables
-    # bucket = "your-terraform-state-bucket"
-    # key    = "fhir-ml-pipeline/terraform.tfstate"
-    # region = "us-west-2"
-  }
 }
 
 provider "aws" {
@@ -33,23 +26,27 @@ provider "aws" {
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
-# Variables
-variable "aws_region" {
-  description = "AWS region"
-  type        = string
-  default     = "us-west-2"
+# Local values
+locals {
+  db_password_secret_name = var.db_password_secret_name != "" ? var.db_password_secret_name : "${var.project_name}-${var.environment}-db-password"
 }
 
-variable "environment" {
-  description = "Environment name"
-  type        = string
-  default     = "dev"
+# Fetch database password from AWS Secrets Manager
+data "aws_secretsmanager_secret" "db_password" {
+  name = local.db_password_secret_name
 }
 
-variable "project_name" {
-  description = "Project name"
-  type        = string
-  default     = "fhir-ml-pipeline"
+data "aws_secretsmanager_secret_version" "db_password" {
+  secret_id = data.aws_secretsmanager_secret.db_password.id
+}
+
+# Parse the secret (handles both JSON and plain string)
+locals {
+  secret_string = data.aws_secretsmanager_secret_version.db_password.secret_string
+  # Try to parse as JSON first, fallback to plain string
+  db_password = var.db_password != null ? var.db_password : (
+    can(jsondecode(local.secret_string)["password"]) ? jsondecode(local.secret_string)["password"] : local.secret_string
+  )
 }
 
 # VPC Configuration
@@ -197,7 +194,7 @@ resource "aws_db_instance" "main" {
   
   db_name  = "fhir_db"
   username = "fhir_user"
-  password = var.db_password
+  password = local.db_password
   
   vpc_security_group_ids = [aws_security_group.rds.id]
   db_subnet_group_name   = aws_db_subnet_group.main.name
@@ -244,41 +241,4 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "fhir_data" {
       sse_algorithm = "AES256"
     }
   }
-}
-
-# Outputs
-output "vpc_id" {
-  description = "ID of the VPC"
-  value       = module.vpc.vpc_id
-}
-
-output "private_subnets" {
-  description = "List of IDs of private subnets"
-  value       = module.vpc.private_subnets
-}
-
-output "public_subnets" {
-  description = "List of IDs of public subnets"
-  value       = module.vpc.public_subnets
-}
-
-output "ecs_cluster_id" {
-  description = "ID of the ECS cluster"
-  value       = aws_ecs_cluster.main.id
-}
-
-output "alb_dns_name" {
-  description = "DNS name of the load balancer"
-  value       = aws_lb.main.dns_name
-}
-
-output "rds_endpoint" {
-  description = "RDS instance endpoint"
-  value       = aws_db_instance.main.endpoint
-  sensitive   = true
-}
-
-output "s3_bucket_name" {
-  description = "Name of the S3 bucket for FHIR data"
-  value       = aws_s3_bucket.fhir_data.bucket
 }
