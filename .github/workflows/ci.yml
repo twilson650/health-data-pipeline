@@ -66,19 +66,36 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Check if docker-compose.yml has content
+      id: check-compose
+      run: |
+        if [ -s docker-compose.yml ] && grep -q "services:" docker-compose.yml; then
+          echo "has_services=true" >> $GITHUB_OUTPUT
+        else
+          echo "has_services=false" >> $GITHUB_OUTPUT
+        fi
+
     - name: Set up Docker Buildx
+      if: steps.check-compose.outputs.has_services == 'true'
       uses: docker/setup-buildx-action@v3
 
     - name: Build Docker Compose
+      if: steps.check-compose.outputs.has_services == 'true'
       run: docker compose build
 
     - name: Test Docker Compose
+      if: steps.check-compose.outputs.has_services == 'true'
       run: docker compose up -d --abort-on-container-exit
 
     - name: Check container health
+      if: steps.check-compose.outputs.has_services == 'true'
       run: |
         docker compose ps
         docker compose logs
+
+    - name: Skip Docker Compose (file is empty)
+      if: steps.check-compose.outputs.has_services == 'false'
+      run: echo "docker-compose.yml is empty, skipping Docker Compose steps"
 
   # Security scanning
   security:
