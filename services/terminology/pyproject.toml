@@ -14,7 +14,11 @@ requests = "^2.32.5"
 python-dotenv = "^1.1.1"
 cqlpy = "^0.3.1"
 
-
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+flake8 = "^7.0.0"
+black = "^24.0.0"
+isort = "^5.13.0"
 
 [build-system]
 requires = ["poetry-core"]
