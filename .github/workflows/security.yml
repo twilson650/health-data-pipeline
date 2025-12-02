@@ -127,15 +127,26 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    # Note: Linter warnings about secret access are expected - secrets are validated at runtime
     - name: Configure AWS credentials
+      id: aws-creds
+      continue-on-error: true
       uses: aws-actions/configure-aws-credentials@v4
       with:
+        # These secrets are optional - workflow continues if not configured
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
     - name: Run AWS Security Hub checks
+      if: steps.aws-creds.outcome == 'success'
       run: |
         # This would run AWS Config rules or Security Hub findings
         echo "Running AWS security checks..."
         # Add your AWS security scanning logic here
+
+    - name: Skip AWS security checks (credentials not configured)
+      if: steps.aws-creds.outcome == 'failure'
+      run: |
+        echo "AWS credentials not configured. Skipping AWS security checks."
+        echo "To enable AWS security scanning, configure AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY secrets."
