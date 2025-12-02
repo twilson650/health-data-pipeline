@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [terminology, measures]
+        service: [terminology]
     
     steps:
     - name: Checkout
@@ -60,6 +60,37 @@ jobs:
         poetry run flake8 src/
         poetry run black --check src/
         poetry run isort --check-only src/
+
+  # Node.js services testing
+  nodejs-services:
+    name: Node.js Services
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [measures]
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: services/${{ matrix.service }}/package-lock.json
+
+    - name: Install dependencies
+      working-directory: services/${{ matrix.service }}
+      run: npm ci
+
+    - name: Run tests
+      working-directory: services/${{ matrix.service }}
+      run: npm test
+
+    - name: Run linting
+      working-directory: services/${{ matrix.service }}
+      run: npm run lint
 
   # Docker services testing
   docker-services:

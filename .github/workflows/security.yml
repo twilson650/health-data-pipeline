@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [terminology, measures]
+        service: [terminology]
     
     steps:
     - name: Checkout
@@ -70,7 +70,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: '3.13'
 
     - name: Install Poetry
       uses: snok/install-poetry@v1
@@ -92,6 +92,31 @@ jobs:
       run: |
         poetry add --group dev bandit
         poetry run bandit -r src/ -f json -o bandit-report.json || true
+
+  # Node.js security scanning
+  nodejs-security:
+    name: Node.js Security Scan
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [measures]
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      working-directory: services/${{ matrix.service }}
+      run: npm ci
+
+    - name: Run npm audit
+      working-directory: services/${{ matrix.service }}
+      run: npm audit --audit-level=moderate --json > npm-audit-report.json || true
 
   # AWS security best practices
   aws-security:

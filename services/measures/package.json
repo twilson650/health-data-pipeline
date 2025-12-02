@@ -1,0 +1,33 @@
+{
+  "name": "clinical-measures",
+  "version": "0.1.0",
+  "description": "FHIR clinical quality measures service",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test",
+    "lint": "eslint src/",
+    "format": "prettier --write src/"
+  },
+  "keywords": [
+    "fhir",
+    "cql",
+    "clinical-quality-measures"
+  ],
+  "author": "Tom Wilson <twilson650@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+
