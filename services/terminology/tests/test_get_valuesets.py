@@ -3,8 +3,10 @@ import json
 from pathlib import Path
 import re
 from typing import List, Dict
+import pytest
 from terminology.vsac import VSAC
 import logging
+
 logger = logging.getLogger(__name__)
 
 def read_cql_file(filename: str) -> str:
@@ -48,21 +50,36 @@ def parse_valuesets(cql_content: str) -> List[Dict[str, str]]:
     
     return valuesets
 
-# Test the parsing
-cql_content = read_cql_file("valueset_list.cql")
-valuesets = parse_valuesets(cql_content)
 
-print(f"Found {len(valuesets)} valuesets:")
-
-vsac_client = VSAC()
-
-for vs in valuesets[:5]:  # Show first 5
+def test_parse_valuesets():
+    """Test parsing valuesets from CQL content."""
+    cql_content = read_cql_file("valueset_list.cql")
+    valuesets = parse_valuesets(cql_content)
     
-    print(f"Name: {vs['name']}, OID: {vs['oid']}")
-    #print(json.dumps(vs, indent=2))
-    vsac_valueset = vsac_client.get_valueset_by_oid(vs['oid'])
-    print(vsac_valueset.model_dump_json(indent=2))
-   # print(json.dumps(vsac_valueset, indent=2))
+    assert valuesets is not None
+    assert len(valuesets) > 0
+    print(f"Found {len(valuesets)} valuesets:")
+
+
+def test_get_valuesets_from_vsac(mock_vsac_api):
+    """Test retrieving valuesets from VSAC API with mocked calls."""
+    cql_content = read_cql_file("valueset_list.cql")
+    valuesets = parse_valuesets(cql_content)
+    
+    assert valuesets is not None
+    assert len(valuesets) > 0
+    
+    vsac_client = VSAC()
+    
+    # Test first 5 valuesets
+    for vs in valuesets[:5]:
+        print(f"Name: {vs['name']}, OID: {vs['oid']}")
+        vsac_valueset = vsac_client.get_valueset_by_oid(vs['oid'])
+        assert vsac_valueset is not None
+        # Verify it's a ValueSet by checking the class name or id attribute
+        assert vsac_valueset.__class__.__name__ == "ValueSet"
+        assert vsac_valueset.id is not None
+        print(vsac_valueset.model_dump_json(indent=2))
 
 
 
