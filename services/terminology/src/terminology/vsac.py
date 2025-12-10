@@ -14,15 +14,11 @@ https://www.hl7.org/fhir/valueset.html
 
 """
 import os
-import json
 from dotenv import load_dotenv
 import requests
 from requests.auth import HTTPBasicAuth
 from fhir.resources.R4B.valueset import ValueSet
 from fhir.resources.R4B.bundle import Bundle
-from fhir.resources.R4B.domainresource import DomainResource
-
-
 
 
 BASE_URL = "https://cts.nlm.nih.gov/fhir/"
@@ -34,15 +30,14 @@ class VSAC:
         load_dotenv()
         self.api_key = os.getenv("VSAC_API_KEY", "")
         self.base_url = BASE_URL
-        self.test_base_url = TEST_BASE_URL  
+        self.test_base_url = TEST_BASE_URL
         self.session = requests.Session()
         self.session.headers.update({
             "Accept": "application/json",
         })
-        # Use HTTP Basic Auth with username 'apikey' and the API key as the password
+        # Use HTTP Basic Auth with username 'apikey' parameter
         self.session.auth = HTTPBasicAuth("apikey", self.api_key)
 
-        
     def get_valuesets(self) -> Bundle:
         response = self.make_request(f"{self.base_url}/ValueSet")
         return Bundle(**response.json())
@@ -64,14 +59,17 @@ class VSAC:
         """
         Make a REST call to the VSAC API and return the response.
         The response could be an OperationOutcome or a FHIR resource.
-        If the response is an OperationOutcome, raise an exception and log the error.
-        If the response is a FHIR resource, return the resource.
+        OperationOutcome may indicate an error.
         """
         response = self.session.get(url)
         if response.status_code == 200:
             return response
         else:
-            raise Exception(f"Error making request to {url}: {response.status_code} {response.text}")
+            raise Exception(
+                f"""Error making request to {url}: {response.status_code}
+                {response.text}
+                {response.json()}"""
+            )
 
 
 def extract_valuesets(Bundle):
@@ -94,4 +92,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
